@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using Yunpian.model;
 
 namespace Yunpian.lib
@@ -22,11 +22,11 @@ namespace Yunpian.lib
             {
                 if (sb.Length != 0)
                     sb.Append("&");
-                sb.Append(HttpUtility.UrlEncode(item.Key) + '='+ HttpUtility.UrlEncode(item.Value));
+                sb.Append(WebUtility.UrlEncode(item.Key) + '='+ WebUtility.UrlEncode(item.Value));
             }
             byte[] dataArray = Encoding.UTF8.GetBytes(sb.ToString());
             // Console.Write(Encoding.UTF8.GetString(dataArray));
-
+#if (false)
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);
             request.Timeout = 5000;
             request.ReadWriteTimeout = 5000;
@@ -66,6 +66,24 @@ namespace Yunpian.lib
                     }
                 }
             }
+#else
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    client.Timeout = TimeSpan.FromSeconds(5);
+                    var response = client.PostAsync(Url, new FormUrlEncodedContent(parms)).GetAwaiter().GetResult();
+                    var json = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                    return new Result((int)response.StatusCode, json);
+                }
+                catch(Exception e)
+                {
+                    return new Result(500, string.Empty);
+                }
+                
+            }
+                
+#endif
         }
         public static bool CheckReturnJsonStatus(string retrunJsonResult)
         {

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Web;
 using Yunpian.conf;
 using Yunpian.model;
+using System.Net;
 
 namespace Yunpian.lib
 {
@@ -33,7 +33,7 @@ namespace Yunpian.lib
             {
                 if (sb.Length != 0)
                     sb.Append(",");
-                sb.Append(HttpUtility.UrlEncode(s));
+                sb.Append(WebUtility.UrlEncode(s));
             }
             parms["text"] = sb.ToString();
             return HttpUtil.HttpPost(Config.url_send_multi_sms, parms);
