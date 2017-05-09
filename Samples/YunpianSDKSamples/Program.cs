@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Yunpian.conf;
 using Yunpian.lib;
 using Yunpian.model;
-using System.Web;
 using System.Text;
 namespace YunpianSDKTest
 {
