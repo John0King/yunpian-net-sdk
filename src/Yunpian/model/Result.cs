@@ -14,7 +14,7 @@ namespace Yunpian.model
         public int statusCode;
         public string responseText;
         public Exception e;
-        public JArray data;
+        public JObject data;
         public Result(int statusCode,string responseText,Exception e=null)
         {
             if (statusCode == 200)
@@ -43,9 +43,9 @@ namespace Yunpian.model
             //重写需要的输出。
             return "[success:" + success + ",statusCode:" + statusCode + ",responseText:" + responseText + ",data:" + data + "]";
         }
-        public static JArray strToObj(string str)
+        public static JObject strToObj(string str)
         {
-            JArray json = (JArray)JsonConvert.DeserializeObject(str);
+            var json = (JObject)JsonConvert.DeserializeObject(str);
             return json;
         }
 

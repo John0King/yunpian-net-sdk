@@ -72,13 +72,15 @@ namespace Yunpian.lib
                 try
                 {
                     client.Timeout = TimeSpan.FromSeconds(5);
-                    var response = client.PostAsync(Url, new FormUrlEncodedContent(parms)).GetAwaiter().GetResult();
-                    var json = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                    return new Result((int)response.StatusCode, json);
+                    using (var response = client.PostAsync(Url, new FormUrlEncodedContent(parms)).GetAwaiter().GetResult())
+                    {
+                        var json = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                        return new Result((int)response.StatusCode, json);
+                    }
                 }
                 catch(Exception e)
                 {
-                    return new Result(500, string.Empty);
+                    return new Result(500, string.Empty,e);
                 }
                 
             }
